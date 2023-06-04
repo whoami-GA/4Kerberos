@@ -1,0 +1,9 @@
+import subprocess
+import re
+
+
+def ejecutar_nmap():
+    ip = 'ip'
+    comando = ['sudo' , 'nmap' , '-p-' , '-sS' , '-open' , '-n' , '-Pn' , '-oG' , 'allPorts' , ip]
+    resultado = subprocess.check_output(comando, encoding="utf-8")
+    print(resultado)
