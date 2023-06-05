@@ -10,7 +10,7 @@ def ejecutar_comando(comando):
         print("Error:")
        # print(resultado.stderr)
 
-comando = 'sudo nmap -p- -open -sS -vvv --min-rate 5000 -n -Pn 192.168.40.134 -oG allPorts'
+comando = 'sudo nmap -p- -open -sS -vvv --min-rate 5000 -n -Pn ip -oG allPorts'
 ejecutar_comando(comando)
 
 def cat_allPorts(comando):
