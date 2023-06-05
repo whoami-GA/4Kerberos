@@ -1,9 +1,51 @@
 import subprocess
 import re
 
+def ejecutar_comando(comando):
+    resultado = subprocess.run(comando, shell=True, capture_output=True, text=True)
+    if resultado.returncode == 0:
+        print("Salida:")
+       # print(resultado.stdout)
+    else:
+        print("Error:")
+       # print(resultado.stderr)
 
-def ejecutar_nmap():
-    ip = 'ip'
-    comando = ['sudo' , 'nmap' , '-p-' , '-sS' , '-open' , '-n' , '-Pn' , '-oG' , 'allPorts' , ip]
-    resultado = subprocess.check_output(comando, encoding="utf-8")
-    print(resultado)
+comando = 'sudo nmap -p- -open -sS -vvv --min-rate 5000 -n -Pn 192.168.40.134 -oG allPorts'
+ejecutar_comando(comando)
+
+def cat_allPorts(comando):
+    resultado = subprocess.run(comando, shell=True, capture_output=True, text=True)
+    if resultado.returncode == 0:
+        print("Contenido del archivo allPorts:")
+    #    print(resultado.stdout)
+    else:
+        print("Error:")
+    #   print(resultado.stderr)
+
+comandoCat = 'cat allPorts'
+cat_allPorts(comandoCat)
+
+
+def extractPorts(filename):
+    with open(filename, 'r') as file:
+        content = file.read()
+
+    ports = re.findall(r'\d{1,5}/open', content)
+    ports = [port.split('/')[0] for port in ports]
+    ports = ','.join(ports)
+
+    ip_address = re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', content)
+    ip_address = sorted(set(ip_address))[0]
+
+    output = f"[*] Extracting information...\n\n"
+    output += f"\t[*] IP Address: {ip_address}\n"
+    output += f"\t[*] Open ports: {ports}\n\n"
+    
+    with open("extractPorts.tmp", "w") as tmp_file:
+        tmp_file.write(output)
+
+    subprocess.run(["batcat", "extractPorts.tmp"])
+    subprocess.run(["rm", "extractPorts.tmp"])
+
+# Ejemplo de uso
+extractPorts("allPorts")
