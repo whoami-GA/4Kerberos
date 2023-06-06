@@ -41,6 +41,11 @@ def extractPorts(filename):
     output += f"\t[*] IP Address: {ip_address}\n"
     output += f"\t[*] Open ports: {ports}\n\n"
     
+   if '88' in output:
+    print("Se ha encontrado Kerberos")
+   else:
+    print("No se ha encontrado Kerberos")
+    
     with open("extractPorts.tmp", "w") as tmp_file:
         tmp_file.write(output)
 
